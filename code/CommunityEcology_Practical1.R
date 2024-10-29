@@ -25,3 +25,18 @@ new.dat.all <- dat.all[-speciesNA,]
 new.dat.all <- new.dat.all[-islandsNA,]
 View(new.dat.all)
 
+# now, ideally we would clean the data to make sure that there are no synonym species; we'll skip that for now
+
+# we create 6 new data frames from new.dat.all, each of which will include all entries corresponding to the archipielago of interest:
+
+dat.soc <- new.dat.all[which(new.dat.all$islandgroup=="Society"),]
+dat.mar <- new.dat.all[which(new.dat.all$islandgroup=="Marquesas"),]
+dat.haw <- new.dat.all[which(new.dat.all$islandgroup=="Hawaiian"),]
+dat.sam <- new.dat.all[which(new.dat.all$islandgroup=="Samoa"),]
+dat.fij <- new.dat.all[which(new.dat.all$islandgroup=="Fiji"),]
+
+View(dat.soc)
+View(dat.mar)
+View(dat.haw)
+View(dat.sam)
+View(dat.fij)
