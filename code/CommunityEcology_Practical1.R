@@ -40,3 +40,18 @@ View(dat.mar)
 View(dat.haw)
 View(dat.sam)
 View(dat.fij)
+
+# now, to compute community patterns, we need site-by-species dataframes for each archipielago, which we can achieve using the following bit of code:
+
+# for Society archipielago:
+
+dat.soc.red <- dat.soc[,c("species","island")] # we create a dataframe including only species and island data
+dat.soc.red$presence <- 1  # we create a new column in this dataframe in which we'll indicate presence/absence of each of this species 
+dat.soc.pa <- dat.soc.red %>%  #  here we're passing the dat.soc.red data frame into the next function using the operator pipe (%>%)
+  pivot_wider(names_from=species,values_from=c(presence)) # the pivot_wider() function of tidyverse converts data from a long format to a wide format, creating a new dataframe in the values under "species" become columns, the "islands" become rows and the cells are filled with the corresponding "presence" values 
+list0 <- as.list(rep(0,ncol(dat.soc.pa))) # here we create a list with as many 0s as there are columns in dat.soc.pa
+names(list0) <- names(dat.soc.pa) # we assign the species names to this list of 0s
+dat.soc.pa <- as.data.frame(dat.soc.pa %>% replace_na(list0)) # here we replace all NAs with 0s for all species in dat.soc.pa
+row.names(dat.soc.pa) <- dat.soc.pa$island # here we give to each row the name of its corresponding island
+dat.soc.pa <- dat.soc.pa[,-1] # we remove the island column because we don't need it anymore, as we have given island names to all rows
+
