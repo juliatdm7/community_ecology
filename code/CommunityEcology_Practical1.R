@@ -55,3 +55,51 @@ dat.soc.pa <- as.data.frame(dat.soc.pa %>% replace_na(list0)) # here we replace 
 row.names(dat.soc.pa) <- dat.soc.pa$island # here we give to each row the name of its corresponding island
 dat.soc.pa <- dat.soc.pa[,-1] # we remove the island column because we don't need it anymore, as we have given island names to all rows
 
+# we can now repeat this for all archipielagos
+
+# Marquesas archipielago #
+dat.mar.red <- dat.mar[,c("species","island")] 
+dat.mar.red$presence <- 1 
+dat.mar.pa <- dat.mar.red %>% 
+  pivot_wider(names_from=species,values_from=c(presence))
+list0 <- as.list(rep(0,ncol(dat.mar.pa)))
+names(list0) <- names(dat.mar.pa)
+dat.mar.pa <- as.data.frame(dat.mar.pa %>% replace_na(list0))
+row.names(dat.mar.pa) <- dat.mar.pa$island
+dat.mar.pa <- dat.mar.pa[,-1]
+
+# Hawaii archipielago #
+dat.haw.red <- dat.haw[,c("species","island")]
+dat.haw.red$presence <- 1 
+dat.haw.pa <- dat.haw.red %>% 
+  pivot_wider(names_from=species,values_from=c(presence))
+list0 <- as.list(rep(0,ncol(dat.haw.pa)))
+names(list0) <- names(dat.haw.pa)
+dat.haw.pa <- dat.haw.pa %>% replace_na(list(island = "0")) # I had to add this line because the following error poped up: "Error in `vec_assign()`: ! Can't convert `replace$island` <double> to match type of `data$island` <character>."
+dat.haw.pa <- as.data.frame(dat.haw.pa %>% replace_na(list0))
+row.names(dat.haw.pa) <- dat.haw.pa$island
+dat.haw.pa <- dat.haw.pa[,-1]
+
+# Samoa archipielago #
+dat.sam.red <- dat.sam[,c("species","island")] 
+dat.sam.red$presence <- 1 
+dat.sam.pa <- dat.sam.red %>% 
+  pivot_wider(names_from=species,values_from=c(presence))
+list0 <- as.list(rep(0,ncol(dat.sam.pa)))
+names(list0) <- names(dat.sam.pa)
+dat.sam.pa <- dat.sam.pa %>% replace_na(list(island = "0"))
+dat.sam.pa <- as.data.frame(dat.sam.pa %>% replace_na(list0))
+row.names(dat.sam.pa) <- dat.sam.pa$island
+dat.sam.pa <- dat.sam.pa[,-1]
+
+# Fiji archipielago #
+dat.fij.red <- dat.mar[,c("species","island")] 
+dat.fij.red$presence <- 1 
+dat.fij.pa <- dat.mar.red %>% 
+  pivot_wider(names_from=species,values_from=c(presence))
+list0 <- as.list(rep(0,ncol(dat.fij.pa)))
+names(list0) <- names(dat.fij.pa)
+dat.fij.pa <- as.data.frame(dat.fij.pa %>% replace_na(list0))
+row.names(dat.fij.pa) <- dat.fij.pa$island
+dat.fij.pa <- dat.fij.pa[,-1]
+
