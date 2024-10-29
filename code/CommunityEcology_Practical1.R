@@ -103,3 +103,51 @@ dat.fij.pa <- as.data.frame(dat.fij.pa %>% replace_na(list0))
 row.names(dat.fij.pa) <- dat.fij.pa$island
 dat.fij.pa <- dat.fij.pa[,-1]
 
+
+## Richness patterns
+# let's calculate alfa and gamma diversity for each archipielago
+alfa.div.soc <- mean(rowSums(dat.soc.pa)) # this is the average number of species per island in the Society archipielago: 150.3571
+gamma.div.soc <- ncol(dat.soc.pa) # number of species present in the Society archipielago:685  
+
+alfa.div.mar <- mean(rowSums(dat.mar.pa)) # this is the average number of species per island in the Marquesas archipielago:166.3
+gamma.div.mar <- ncol(dat.mar.pa) # number of species present in the Marquesas archipielago:475  
+
+alfa.div.haw <- mean(rowSums(dat.haw.pa)) # this is the average number of species per island in the Hawaiian archipielago:417.1538
+gamma.div.haw <- ncol(dat.haw.pa) # number of species present in the Hawaiian archipielago:1771  
+
+alfa.div.sam <- mean(rowSums(dat.sam.pa)) # this is the average number of species per island in the Samoan archipielago:110.1667
+gamma.div.sam <- ncol(dat.sam.pa) # number of species present in the Samoan archipielago:413
+
+alfa.div.fij <- mean(rowSums(dat.fij.pa)) # this is the average number of species per island in the Fiji archipielago:164.5
+gamma.div.fij <- ncol(dat.fij.pa) # number of species present in the Fiji archipielago:473
+
+alfa <- c(alfa.div.soc, alfa.div.mar, alfa.div.haw, alfa.div.sam, alfa.diversity.fij)
+gamma <- c(gamma.div.soc, gamma.div.mar, gamma.div.haw, gamma.div.sam, gamma.diversity.fij)
+
+indices <- c("alfa", "gamma")
+islands <- c("Society", "Marquesas", "Hawaii", "Samoa", "Fiji")
+
+div_indices <- as.data.frame(matrix(c(alfa,  gamma), nrow=5, ncol=2, dimnames = list(islands,indices)))
+
+
+## Species Accumulation Curves (SAC)
+
+sac.soc <- vegan::specaccum(dat.soc.pa)
+plot(sac.soc, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Society archipielago")
+
+sac.mar <- vegan::specaccum(dat.mar.pa)
+plot(sac.mar, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Marquesas archipielago")
+
+sac.haw <- vegan::specaccum(dat.haw.pa)
+plot(sac.soc, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Hawaii archipielago")
+
+sac.sam <- vegan::specaccum(dat.sam.pa)
+plot(sac.sam, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Samoa archipielago")
+
+sac.fij <- vegan::specaccum(dat.fij.pa)
+plot(sac.fij, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Fiji archipielago")
+
+# none of these curves seems to be saturating just yet. Yes, the slope is decreasing as we increase the number of sites (islands) sampled, but it doesn't feel close enough to saturation.
+
+
+
