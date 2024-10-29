@@ -148,6 +148,7 @@ sac.fij <- vegan::specaccum(dat.fij.pa)
 plot(sac.fij, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Fiji archipielago")
 
 # none of these curves seems to be saturating just yet. Yes, the slope is decreasing as we increase the number of sites (islands) sampled, but it doesn't feel close enough to saturation.
+# let's try to plot SAC but using the Chao2 estimator now using the poolaccum() function in the vegan package
 
-
-
+sac.chao.soc <- vegan::poolaccum(dat.soc.pa)
+plot(sac.chao.soc)
