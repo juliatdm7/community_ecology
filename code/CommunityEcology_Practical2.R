@@ -88,3 +88,30 @@ which(rowSums(bird.summer.dat.pa)==0)
 which(colSums(bird.winter.dat.pa)==0)
 which(rowSums(bird.winter.dat.pa)==0)
 
+
+
+## Compute general patterns ##
+
+##1) Gamma diversity
+gamma.summer <- ncol(bird.summer.dat.pa)
+gamma.winter <- ncol(bird.winter.dat.pa) # gamma diversity is greater in winter than in summer in the main island.
+
+##2) Alfa diversity
+alfa.summer <- mean(rowSums(bird.summer.dat.pa)) # the average alfa diversity (diversity per grid) is 83.51
+alfa.winter <- mean(rowSums(bird.winter.dat.pa)) # the average alfa diversity (diversity per grid) is 92.224 (also greater)
+
+hist(rowSums(bird.summer.dat.pa), ylim=c(0,800), xlim=c(0,300))
+hist(rowSums(bird.winter.dat.pa), ylim=c(0,800), xlim=c(0,300))
+
+##3) Species accumulation curves
+
+sac.bird.summer <- vegan::specaccum(bird.summer.dat.pa)
+plot(sac.bird.summer, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Summer")
+
+sac.bird.winter <- vegan::specaccum(bird.winter.dat.pa)
+plot(sac.bird.winter, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Winter")
+
+    # From the SAC, it seems that saturation is higher for Winter (close to 400) than for summer (around 260 maybe) season. Also, it looks like summer season reaches saturation faster than winter curve, which means than during the summer you would need to sample less grids to account for most bird diversity, unlike in the winter.
+
+sac.chao.summer <- vegan::poolaccum(bird.summer.dat.pa)
+plot(sac.chao.summer)
