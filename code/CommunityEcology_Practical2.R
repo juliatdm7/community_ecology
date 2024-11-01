@@ -45,3 +45,46 @@ plot(st_geometry(UK.sf))
 points(coords.dat.island)
 
 
+# Now we'll select data for the most recent period, and format it into a site-by-species matrix
+
+# We will select the most recent time frame to extract the data from and we will create two dataframes: one for winter season and another one for summer season
+
+##select bird data for the desired period
+bird.dat <- bird.dat.tot[which(bird.dat.tot$period=="2008-11" | bird.dat.tot$period=="2007/08-10/11"),c("period","speccode","grid")] # we phrase it like this as the data gathered between 2008 and 2011 is stored with these two phrasings
+dim(coords.dat.island)
+coords.dat.island <- coords.dat.island[which(coords.dat.island$grid %in% bird.dat$grid),] # this allows us to check which grids actually have bird data: the intersection between all the grids and the grids associated to our data
+dim(coords.dat.island)
+bird.dat <- bird.dat[which(bird.dat$grid %in% coords.dat.island$grid),]
+
+bird.summer.dat <- bird.dat[which(bird.dat$period=="2008-11"),c("speccode","grid")]
+bird.winter.dat <- bird.dat[which(bird.dat$period=="2007/08-10/11"),c("speccode","grid")]
+
+bird.summer.dat$presence <- 1 ##add a column with the valuesto populate the site-by-species data frame
+bird.summer.dat.pa <- bird.summer.dat %>%
+  pivot_wider(names_from=speccode,values_from=c(presence))
+##site-by-species data frames with NAs
+list0 <- as.list(rep(0,ncol(bird.summer.dat.pa))) ##values to replace the NAs
+names(list0) <- names(bird.summer.dat.pa)
+bird.summer.dat.pa <- as.data.frame(bird.summer.dat.pa %>% replace_na(list0)) ##replace the NAs by 0’s
+row.names(bird.summer.dat.pa) <- bird.summer.dat.pa$grid
+##change row names
+bird.summer.dat.pa <- bird.summer.dat.pa[,-1] ##remove the first column with site names
+bird.summer.dat.pa <- bird.summer.dat.pa[order(row.names(bird.summer.dat.pa)),]
+##sort by grid cell names
+
+bird.winter.dat$presence <- 1
+bird.winter.dat.pa <- bird.winter.dat %>% pivot_wider(names_from=speccode,values_from=c(presence))
+list0 <- as.list(rep(0,ncol(bird.winter.dat.pa)))
+names(list0) <- names(bird.winter.dat.pa)
+bird.winter.dat.pa <- as.data.frame(bird.winter.dat.pa %>% replace_na(list0))
+row.names(bird.winter.dat.pa) <- bird.winter.dat.pa$grid
+bird.winter.dat.pa <- bird.winter.dat.pa[,-1]
+bird.winter.dat.pa <- bird.winter.dat.pa[order(row.names(bird.winter.dat.pa)),]
+
+#Now, we need to conform that there are no empty cells, nor species occurring in no cell
+
+which(colSums(bird.summer.dat.pa)==0)
+which(rowSums(bird.summer.dat.pa)==0)
+which(colSums(bird.winter.dat.pa)==0)
+which(rowSums(bird.winter.dat.pa)==0)
+
