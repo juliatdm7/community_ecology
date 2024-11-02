@@ -105,13 +105,24 @@ hist(rowSums(bird.winter.dat.pa), ylim=c(0,800), xlim=c(0,300))
 
 ##3) Species accumulation curves
 
+par(mfrow=c(1,2))
 sac.bird.summer <- vegan::specaccum(bird.summer.dat.pa)
-plot(sac.bird.summer, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Summer")
+plot(sac.bird.summer$richness, col ="blue", main = "SAC for Summer", ylim=c(0,400))
 
 sac.bird.winter <- vegan::specaccum(bird.winter.dat.pa)
-plot(sac.bird.winter, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Winter")
+plot(sac.bird.winter$richness, col ="blue", main = "SAC for Winter")
 
     # From the SAC, it seems that saturation is higher for Winter (close to 400) than for summer (around 260 maybe) season. Also, it looks like summer season reaches saturation faster than winter curve, which means than during the summer you would need to sample less grids to account for most bird diversity, unlike in the winter.
 
-sac.chao.summer <- vegan::poolaccum(bird.summer.dat.pa)
-plot(sac.chao.summer)
+sac.chao.summer <- poolaccum(bird.summer.dat.pa)
+plot(sac.bird.summer$richness, col ="blue", ylim=c(0, max(rowMeans(sac.chao.summer$chao))), type="l", main = "SAC for Summer")
+points(3:nrow(bird.summer.dat.pa), rowMeans(sac.chao.summer$chao), col="red", type="l")
+
+sac.chao.winter <- poolaccum(bird.winter.dat.pa)
+plot(sac.bird.winter$richness, col ="blue", ylim=c(0, max(rowMeans(sac.chao.winter$chao))), main = "SAC for Winter", type="l")
+points(3:nrow(bird.winter.dat.pa), rowMeans(sac.chao.winter$chao), col="red", type="l")
+
+# However, it's important to note that in this particular case the chao estimate is not working properly because of the scale we're working on.
+# The grid size is too big, which means that one grid could include sampling sites in which species have not been detected (true 0s) and sampling sites where species have been detected (true 1s). However, chao estimator will interpret this as not having encountered all species that could potentially be there, and as a result is over estimating the actual diversity in the island.
+
+beta.summer <- betapart::beta.pair(bird.summer.dat.pa)
