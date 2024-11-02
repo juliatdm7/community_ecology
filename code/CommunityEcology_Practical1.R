@@ -121,8 +121,8 @@ gamma.div.sam <- ncol(dat.sam.pa) # number of species present in the Samoan arch
 alfa.div.fij <- mean(rowSums(dat.fij.pa)) # this is the average number of species per island in the Fiji archipielago:164.5
 gamma.div.fij <- ncol(dat.fij.pa) # number of species present in the Fiji archipielago:473
 
-alfa <- c(alfa.div.soc, alfa.div.mar, alfa.div.haw, alfa.div.sam, alfa.diversity.fij)
-gamma <- c(gamma.div.soc, gamma.div.mar, gamma.div.haw, gamma.div.sam, gamma.diversity.fij)
+alfa <- c(alfa.div.soc, alfa.div.mar, alfa.div.haw, alfa.div.sam, alfa.div.fij)
+gamma <- c(gamma.div.soc, gamma.div.mar, gamma.div.haw, gamma.div.sam, gamma.div.fij)
 
 indices <- c("alfa", "gamma")
 islands <- c("Society", "Marquesas", "Hawaii", "Samoa", "Fiji")
@@ -132,23 +132,44 @@ div_indices <- as.data.frame(matrix(c(alfa,  gamma), nrow=5, ncol=2, dimnames = 
 
 ## Species Accumulation Curves (SAC)
 
+par(mfrow=c(2,3))
+
 sac.soc <- vegan::specaccum(dat.soc.pa)
-plot(sac.soc, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Society archipielago")
+plot(sac.soc$richness, col ="blue", type="l", ylim=c(100,1800), xlim=c(0,15), main = "SAC for Society archipielago")
 
 sac.mar <- vegan::specaccum(dat.mar.pa)
-plot(sac.mar, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Marquesas archipielago")
+plot(sac.mar$richness, col ="blue", type="l", ylim=c(100,1800), xlim=c(0,15), main = "SAC for Marquesas archipielago")
 
 sac.haw <- vegan::specaccum(dat.haw.pa)
-plot(sac.soc, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Hawaii archipielago")
+plot(sac.haw$richness, col ="blue", type="l", ylim=c(100,1800), xlim=c(0,15), main = "SAC for Hawaii archipielago")
 
 sac.sam <- vegan::specaccum(dat.sam.pa)
-plot(sac.sam, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Samoa archipielago")
+plot(sac.sam$richness, col ="blue", type="l", ylim=c(100,1800), xlim=c(0,15), main = "SAC for Samoa archipielago")
 
 sac.fij <- vegan::specaccum(dat.fij.pa)
-plot(sac.fij, col ="blue", ci.type = "polygon", ci.col = "lightblue", ci.lty=2, main = "SAC for Fiji archipielago")
+plot(sac.fij$richness, col ="blue", type="l", ylim=c(100,1800), xlim=c(0,15), main = "SAC for Fiji archipielago")
 
 # none of these curves seems to be saturating just yet. Yes, the slope is decreasing as we increase the number of sites (islands) sampled, but it doesn't feel close enough to saturation.
 # let's try to plot SAC but using the Chao2 estimator now using the poolaccum() function in the vegan package
 
+par(mfrow=c(2,3))
+
 sac.chao.soc <- vegan::poolaccum(dat.soc.pa)
-plot(sac.chao.soc)
+plot(sac.soc$richness, col ="blue", type="l", ylim=c(100,max(rowMeans(sac.chao.soc$chao))), xlim=c(0,15), xlab="Nr of islands", main = "SAC for Society archipielago")
+points(3:nrow(dat.soc.pa),rowMeans(sac.chao.soc$chao), col="red", type="l") # i'm not entirely sure why we're choosing those x and y values, I need to ask Guillaume
+
+sac.chao.mar <- vegan::poolaccum(dat.mar.pa)
+plot(sac.mar$richness, col ="blue", type="l", ylim=c(100,max(rowMeans(sac.chao.mar$chao))), xlim=c(0,15), xlab="Nr of islands", main = "SAC for Marquesas archipielago")
+points(3:nrow(dat.mar.pa),rowMeans(sac.chao.mar$chao), col="red", type="l") 
+
+sac.chao.haw <- vegan::poolaccum(dat.haw.pa)
+plot(sac.haw$richness, col ="blue", type="l", ylim=c(100,max(rowMeans(sac.chao.haw$chao))), xlim=c(0,15), xlab="Nr of islands", main = "SAC for Hawaii archipielago")
+points(3:nrow(dat.haw.pa),rowMeans(sac.chao.haw$chao), col="red", type="l") # Here I need to change the limits of the graph or the Chao estimator will not appear
+
+sac.chao.sam <- vegan::poolaccum(dat.sam.pa)
+plot(sac.sam$richness, col ="blue", type="l", ylim= c(100, max(rowMeans(sac.chao.sam$chao))), xlim=c(0,15), xlab="Nr of islands", main = "SAC for Samoa archipielago")
+points(3:nrow(dat.sam.pa),rowMeans(sac.chao.sam$chao), col="red", type="l") # Same thing with Samoa archipielago
+
+sac.chao.fij <- vegan::poolaccum(dat.fij.pa)
+plot(sac.fij$richness, col ="blue", type="l", ylim= c(100, max(rowMeans(sac.chao.fij$chao))), xlim=c(0,15), xlab="Nr of islands", main = "SAC for Fiji archipielago")
+points(3:nrow(dat.fij.pa),rowMeans(sac.chao.fij$chao), col="red", type="l") # Same thing with Samoa archipielago
