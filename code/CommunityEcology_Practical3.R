@@ -60,3 +60,47 @@ names(beta.rand.soc.col) <- c("Sorensen","Simpson")
 
 beta.rand.soc.both <- data.frame(matrix(unlist(lapply(dat.soc.pa.perm.both$perm,beta.mean)),99,2,byrow = TRUE))
 names(beta.rand.soc.both) <- c("Sorensen","Simpson")
+
+beta.soc.obs <- c(mean(beta.soc$beta.sor),mean(beta.soc$beta.sim))
+
+par(mfrow=c(2,4))
+hist(beta.rand.soc.none$Sorensen,breaks=seq(0,1,0.025),main="None fixed",xlab="Sorensen")
+abline(v=quantile(beta.rand.soc.none$Sorensen,0.025),col="blue")
+abline(v=quantile(beta.rand.soc.none$Sorensen,0.975),col="blue")
+abline(v=beta.soc.obs[1],col="red")
+
+hist(beta.rand.soc.row$Sorensen,breaks=seq(0,1,0.025),main="Rows fixed",xlab="Sorensen")
+abline(v=quantile(beta.rand.soc.row$Sorensen,0.025),col="blue")
+abline(v=quantile(beta.rand.soc.row$Sorensen,0.975),col="blue")
+abline(v=beta.soc.obs[1],col="red")
+
+hist(beta.rand.soc.col$Sorensen,breaks=seq(0,1,0.025),main="Columns fixed",xlab="Sorensen")
+abline(v=quantile(beta.rand.soc.col$Sorensen,0.025),col="blue")
+abline(v=quantile(beta.rand.soc.col$Sorensen,0.975),col="blue")
+abline(v=beta.soc.obs[1],col="red")
+
+hist(beta.rand.soc.both$Sorensen,breaks=seq(0,1,0.025),main="Both columns and rows fixed",xlab="Sorensen")
+abline(v=quantile(beta.rand.soc.both$Sorensen,0.025),col="blue")
+abline(v=quantile(beta.rand.soc.both$Sorensen,0.975),col="blue")
+abline(v=beta.soc.obs[1],col="red")
+
+hist(beta.rand.soc.none$Simpson,breaks=seq(0,1,0.025),main="None fixed",xlab="Simpson")
+abline(v=quantile(beta.rand.soc.none$Simpson,0.025),col="blue")
+abline(v=quantile(beta.rand.soc.none$Simpson,0.975),col="blue")
+abline(v=beta.soc.obs[2],col="red")
+
+hist(beta.rand.soc.row$Simpson,breaks=seq(0,1,0.025),main="Rows fixed",xlab="Simpson")
+abline(v=quantile(beta.rand.soc.row$Simpson,0.025),col="blue")
+abline(v=quantile(beta.rand.soc.row$Simpson,0.975),col="blue")
+abline(v=beta.soc.obs[2],col="red")
+
+hist(beta.rand.soc.col$Simpson,breaks=seq(0,1,0.025),main="Columns fixed",xlab="Simpson")
+abline(v=quantile(beta.rand.soc.col$Simpson,0.025),col="blue")
+abline(v=quantile(beta.rand.soc.col$Simpson,0.975),col="blue")
+abline(v=beta.soc.obs[2],col="red")
+
+hist(beta.rand.soc.both$Simpson,breaks=seq(0,1,0.025),main="Both columns and rows fixed",xlab="Simpson")
+abline(v=quantile(beta.rand.soc.both$Simpson,0.025),col="blue")
+abline(v=quantile(beta.rand.soc.both$Simpson,0.975),col="blue")
+abline(v=beta.soc.obs[2],col="red")
+
