@@ -29,3 +29,34 @@ beta.soc <- beta.pair(dat.soc.pa) # list with Sorensen, Simpson and nestedness b
 mean(beta.soc$beta.sim)
 mean(beta.soc$beta.sne)
 mean(beta.soc$beta.sor)
+
+# are these values different from what we would expect by chance alone? 
+# to answer this question we will use a permutation algorithm to generate beta diversity values under randomness.
+# we will do this using permatfull() function in vegan package.
+permatfull(dat.soc.pa, times = 99, mtype = "prab") # we're using dat.soc.pa as our community data matrix, setting the number of permutations to 99 (although it would be better to use 999 permutations, because then we would have 999 simulation plus our actual observation and it would make it easier to determine significancy) and we tell the function that our data type is presence/absence instead of count with the "mtype" argument
+# we can also decide which constraints to impose to the presence/absence matrix:
+## when fixing row sums we're saying that for each island we want to keep the number of species but we don't really mind about which species to keep nor on how many islands we can find each species: we're fixing alpha diversity.
+## when fixing column sums we're saying that, for the whole archipielago, we want to keep the number of islands in which they appear, but we don't really care about the specific islands in which they are present or how many species each island has: we're fixing species occupancy.
+
+#We can compute permutations for all four options and store them in lists:
+dat.soc.pa.perm.none <- permatfull(dat.soc.pa, times = 99, mtype = "prab", fixedmar = "none")
+dat.soc.pa.perm.row <- permatfull(dat.soc.pa, times = 99, mtype = "prab", fixedmar = "rows")
+dat.soc.pa.perm.col <- permatfull(dat.soc.pa, times = 99, mtype = "prab", fixedmar = "columns")
+dat.soc.pa.perm.both <- permatfull(dat.soc.pa, times = 99, mtype = "prab", fixedmar = "both")
+
+beta.mean <- function(dat){ ##this function computes the average for Sorensen and Simpson beta diversity for a given site-by-species matrix dat
+  beta.dat <- beta.pair(dat)
+  return(c(mean(beta.dat$beta.sor),mean(beta.dat$beta.sim)))
+}
+
+beta.rand.soc.none <- data.frame(matrix(unlist(lapply(dat.soc.pa.perm.none$perm,beta.mean)),99,2,byrow = TRUE)) # here we're calculating beta diversity (Sorensen and Simpson diversity indices) for each element of the list (each randomisation). Then, we're converting these into a dataframe by turning them into numerical data (unlist() function) and using the function matrix(). 
+names(beta.rand.soc.none) <- c("Sorensen","Simpson")
+
+beta.rand.soc.row <- data.frame(matrix(unlist(lapply(dat.soc.pa.perm.row$perm,beta.mean)),99,2,byrow = TRUE))
+names(beta.rand.soc.row) <- c("Sorensen","Simpson")
+
+beta.rand.soc.col <- data.frame(matrix(unlist(lapply(dat.soc.pa.perm.col$perm,beta.mean)),99,2,byrow = TRUE))
+names(beta.rand.soc.col) <- c("Sorensen","Simpson")
+
+beta.rand.soc.both <- data.frame(matrix(unlist(lapply(dat.soc.pa.perm.both$perm,beta.mean)),99,2,byrow = TRUE))
+names(beta.rand.soc.both) <- c("Sorensen","Simpson")
