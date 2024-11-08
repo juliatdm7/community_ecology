@@ -18,3 +18,8 @@ library(zetadiv)
 
 #######################################################################################
 
+#In this practical, we will use null models based on permutation algorithms, along with regression models, to explore and interpret alpha and beta diversity values for established alien species in French Polynesia (Society archipielago) and in Hawai'i, and explore what drives species richness and turnover in these two archipielagos.
+
+#First, we load our already-prepared data frames for the analyses:
+
+load("data/Practical3_data/islands_Soc_Haw_null_models_practical.RData")
