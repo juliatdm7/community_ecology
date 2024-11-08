@@ -23,3 +23,9 @@ library(zetadiv)
 #First, we load our already-prepared data frames for the analyses:
 
 load("data/Practical3_data/islands_Soc_Haw_null_models_practical.RData")
+
+beta.soc <- beta.pair(dat.soc.pa) # list with Sorensen, Simpson and nestedness beta diversity values stored in each element of the list as a distance matrix format (one value for each pair of islands)
+# now, we calculate the average beta diversity across islands for each index
+mean(beta.soc$beta.sim)
+mean(beta.soc$beta.sne)
+mean(beta.soc$beta.sor)
