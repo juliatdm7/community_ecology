@@ -44,7 +44,7 @@ dat.soc.pa.perm.row <- permatfull(dat.soc.pa, times = 99, mtype = "prab", fixedm
 dat.soc.pa.perm.col <- permatfull(dat.soc.pa, times = 99, mtype = "prab", fixedmar = "columns")
 dat.soc.pa.perm.both <- permatfull(dat.soc.pa, times = 99, mtype = "prab", fixedmar = "both")
 
-beta.mean <- function(dat){ ##this function computes the average for Sorensen and Simpson beta diversity for a given site-by-species matrix dat
+beta.mean <- function(dat){ ##this function computes the average for Sorensen and Simpson beta diversity for a given site-by-species matrix data.
   beta.dat <- beta.pair(dat)
   return(c(mean(beta.dat$beta.sor),mean(beta.dat$beta.sim)))
 }
@@ -104,5 +104,5 @@ abline(v=quantile(beta.rand.soc.both$Simpson,0.025),col="blue")
 abline(v=quantile(beta.rand.soc.both$Simpson,0.975),col="blue")
 abline(v=beta.soc.obs[2],col="red")
 
-
+#
 
