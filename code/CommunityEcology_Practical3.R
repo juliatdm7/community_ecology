@@ -104,3 +104,5 @@ abline(v=quantile(beta.rand.soc.both$Simpson,0.025),col="blue")
 abline(v=quantile(beta.rand.soc.both$Simpson,0.975),col="blue")
 abline(v=beta.soc.obs[2],col="red")
 
+
+
